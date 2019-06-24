@@ -19,192 +19,90 @@ export class AppComponent implements OnInit {
   property;
   marked = false;
 
-  subj = new Subject()
+  subj = new Subject();
+
+  curretnEvent;
 
 
   getLet(event) {
 
-    if(event.length === 0) {
-
-      this.files2 = [{
-        data: {
-          "name": "Documentssss",
-          "size":"75",
-          "type":"Folder"
-        },
-        children: [],
-        leaf: true,
-        expanded: true
-      },
-        {
-          data: {
-            "name":"Documents1",
-            "size":"75kb",
-            "type":"Folder"
-          },
-          children: [],
-          leaf: true,
-          expanded: true
-        },
-        {
-          data: {
-            "name":"Documents",
-            "size":"75kb",
-            "type":"Folder"
-          },
-          children:[
-            {
-              data:{
-                "name":"Work",
-                "size":"55kb",
-                "type":"Folder"
-              },
-              children:[
-                {
-                  data:{
-                    "name":"Expenses.doc",
-                    "size":"30kb",
-                    "type":"Document"
-                  }
-                },
-                {
-                  data:{
-                    "name":"Resume.doc",
-                    "size":"25kb",
-                    "type":"Resume"
-                  }
-                }
-              ]
-            },
-            {
-              data:{
-                "name":"Home",
-                "size":"20kb",
-                "type":"Folder"
-              },
-              children:[
-                {
-                  data:{
-                    "name":"Invoices",
-                    "size":"20kb",
-                    "type":"Text"
-                  }
-                }
-              ]
-            }
-          ],
-          expanded: false
-        }
-      ];
+      this.getData(this.files2, event);
 
 
-    } else {
+  }
 
 
-      this.files2.map(
-        (m) => {
-          if(m.data.name === event) {
-            // {value: "Documents", searched: true}
-
-            if(this.search(event, m.data.name)) {
-              console.log(this.search(event, m.data.name))
-              m.data.name = {value: [event], searched: true}
-            }
-
+  getData(data, event) {
+    data.map(
+      (m) => {
+          let separators = '('+event+')';
+          this.curretnEvent = event;
+          for(const propertyName in m.data) {
+           let inputData =  m.data[propertyName].value ? m.data[propertyName].value : m.data[propertyName];
+            m.data[propertyName] = {value: inputData, serchedValue: inputData.split(new RegExp(separators)), searched: true};
           }
-
-          if(m.data.size === event) {
-            // {value: "Documents", searched: true}
-
-            if(this.search(event, m.data.size)) {
-              console.log(this.search(event, m.data.size))
-              m.data.size = {value: [event], searched: true}
-            }
-          }
-
-          if(m.data.type === event) {
-            // {value: "Documents", searched: true}
-
-            if(this.search(event, m.data.type)) {
-              m.data.type = {value: [event], searched: true}
-            }
-          }
-
 
           if(m.hasOwnProperty('children')) {
-
-            m.children.map(
-              (n) => {
-                console.log(event)
-                if(n.data.name === event) {
-
-                  m.expanded = true;
-
-
-                  n.data.name = {value: [event], searched: true}
-                  this.subj.next(this.files2)
-                }
-              }
-            )
+            m.expanded = true
+            this.getData(m.children, event);
           }
 
+      }
+    )
+  }
 
 
 
-        }
-      )
+  NO_OF_CHARS = 256;
+
+  max(a, b) { return (a > b) ? a : b; }
+
+  badCharHeuristic(str, size, badchar) {
+    let i;
+
+    for (i = 0; i < this.NO_OF_CHARS; i++) {
+      badchar[i] = -1;
+    }
+
+    for (i = 0; i < size; i++) {
+      badchar[str[i].charCodeAt(str[i])] = i;
     }
 
   }
 
-  NO_OF_CHARS = 256;
 
-  badCharHeuristic(text, textSize, badCharacters) {
-    let i;
-    // Initialize all occurrences as -1
-      for(i = 0; i < this.NO_OF_CHARS; i++) {
-        badCharacters[i] = -1;
+  search(txt, pat) {
+    const patLen = pat.length;
+    const textLen = txt.length;
+    const badchar =  [this.NO_OF_CHARS];
+    let positionOcur = [];
+
+    this.badCharHeuristic(pat, patLen, badchar);
+
+
+    let s = 0;
+
+    while ( s <= ( textLen - patLen) ) {
+      let wordDuration = patLen - 1;
+
+      while (wordDuration >= 0 && pat[wordDuration] === txt[s + wordDuration] ) {
+        wordDuration--;
       }
 
-    // Fill the actual value of last occurrence
-    // of a character
-      for(i = 0; i < textSize; i++) {
-        badCharacters[text[i]] = i;
+      if ( wordDuration < 0 ) {
+        positionOcur.push(s);
+        s += ( s + patLen < textLen ) ? patLen - badchar[ txt.charCodeAt( txt[ s + patLen ]) ] : 1;
+      } else {
+
+        s += this.max(1, wordDuration = badchar[ txt.charCodeAt( txt[s + wordDuration]) ]);
       }
+
+    }
+    return positionOcur;
   }
 
- search(text: string, pattern: string) {
-    let textSize = text.length;
-    let patternSize = pattern.length;
-
-    let badChars = [this.NO_OF_CHARS];
-
-   /* Fill the bad character array by calling
- the preprocessing function badCharHeuristic()
- for given pattern */
-   this.badCharHeuristic(pattern, patternSize, badChars);
-
-   let shiftNumber = 0; // shift pattern
-
-   while(shiftNumber <= (textSize - patternSize)) {
-     let j = patternSize - 1;
-
-     while(j >=0 && pattern[j] == text[shiftNumber + j]) {
-       j--;
-     }
-
-     if(j < 0) {
-        shiftNumber += (shiftNumber + patternSize < textSize) ? patternSize - badChars[text[shiftNumber + patternSize]] : 1;
-        console.log('dd')
-     } else {
-        shiftNumber += Math.max(1, j = badChars[text[shiftNumber + j]]);
-        console.log(shiftNumber);
-     }
-     return shiftNumber;
-   }
 
 
- }
 
   ngOnInit() {
 

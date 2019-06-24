@@ -15,10 +15,19 @@
     <tr>
       <td *ngFor="let col of columns; let i = index">
         <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
-        <mark *ngIf = 'rowData[col.field].searched' [ngClass]="{'text-marked':!marked}">
-          <span>{{rowData[col.field].value[0]}}</span><span>{{rowData[col.field].value[1]}}</span>
+
+        <mark *ngIf = 'rowNode.node.data[col.field].searched' [ngClass]="{'text-marked':!marked}">
+
+          <span *ngFor="let nod of rowNode.node.data[col.field].serchedValue">
+            <mark  *ngIf="nod !== curretnEvent">
+               {{nod}}
+            </mark>
+            <span *ngIf="nod === curretnEvent">
+              {{nod}}
+            </span>
+          </span>
         </mark>
-        <span *ngIf = '!rowData[col.field].searched'>
+        <span *ngIf = '!rowNode.node.data[col.field].serchedValue'>
           {{rowData[col.field]}}
         </span>
       </td>
