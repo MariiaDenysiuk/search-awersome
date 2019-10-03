@@ -5,7 +5,19 @@ import { Subject } from 'rxjs';
 @Component({
   selector: 'lib-search-awersome',
   templateUrl: './search-awersome.component.html',
-  styles: []
+  styles: [
+    .text-marked {
+      background-color: greenyellow;
+    }
+    
+    mark {
+      background-color: white;
+    }
+    
+    span {
+      display: inline-block;
+    }
+  ]
 })
 export class SearchAwersomeComponent implements OnInit {
   public files1: TreeNode[];
