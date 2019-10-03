@@ -1,14 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {TreeNode} from "primeng/api";
-import {max} from "rxjs/operators";
-import {Subject} from "rxjs";
+import { Component, OnInit } from '@angular/core';
+import { TreeNode } from 'primeng/api';
+import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: 'lib-search-awersome',
+  templateUrl: './search-awersome.component.html',
+  styles: []
 })
-export class AppComponent implements OnInit {
+export class SearchAwersomeComponent implements OnInit {
   public files1: TreeNode[];
   public files2: TreeNode[];
   public cols: any[];
@@ -170,5 +169,4 @@ export class AppComponent implements OnInit {
       { field: 'type', header: 'Type' }
     ];
   }
-
 }

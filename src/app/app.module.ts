@@ -11,10 +11,11 @@ import {
   TreeTableModule
 } from 'primeng/primeng';
 import {FormsModule} from "@angular/forms";
+import { SearchAwersomeComponent } from 'projects/search-awersome/src/public-api';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent, SearchAwersomeComponent
   ],
   imports: [
     TreeTableModule,
