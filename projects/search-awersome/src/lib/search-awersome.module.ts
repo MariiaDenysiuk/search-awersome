@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
-import { SearchAwersomeComponent } from './search-awersome.component';
+import { SearchAwersomeComponent } from './componets/search-awersome.component';
 import { TreeTableModule, DropdownModule, MultiSelectModule, ChartModule, EditorModule, InputTextModule } from 'primeng/primeng';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { SearchWrapperComponent } from "./componets/search-wrapper.componet";
 
 @NgModule({
   declarations: [SearchAwersomeComponent],
@@ -16,6 +17,6 @@ import { BrowserModule } from '@angular/platform-browser';
     FormsModule,
     BrowserModule
   ],
-  exports: [SearchAwersomeComponent]
+  exports: [SearchAwersomeComponent, SearchWrapperComponent]
 })
 export class SearchAwersomeModule { }

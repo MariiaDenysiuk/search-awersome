@@ -1,1 +1,35 @@
 <lib-search-awersome></lib-search-awersome>
+
+
+<p-treeTable [value]="files2" [columns]="cols">
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let col of columns" [ttSortableColumn]="col.field">
+        {{col.header}}
+        <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+    <tr>
+      <td *ngFor="let col of columns; let i = index">
+        <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+
+        <mark *ngIf = 'rowNode.node.data[col.field].searched' [ngClass]="{'text-marked':!marked}">
+
+          <span *ngFor="let nod of rowNode.node.data[col.field].serchedValue">
+            <mark  *ngIf="nod !== curretnEvent">
+               {{nod}}
+            </mark>
+            <span *ngIf="nod === curretnEvent">
+              {{nod}}
+            </span>
+          </span>
+        </mark>
+        <span *ngIf = '!rowNode.node.data[col.field].serchedValue'>
+          {{rowData[col.field]}}
+        </span>
+      </td>
+    </tr>
+  </ng-template>
+</p-treeTable>
