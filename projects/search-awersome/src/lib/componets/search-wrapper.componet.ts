@@ -8,10 +8,6 @@ import { SearchAwersomeService } from "../services/search-awersome.service";
 })
 export class SearchWrapperComponent implements OnInit {
   public inputData: any;
-  public cols: any[];
-  // public property;
-  // public marked = false;
-
   public curretnEvent;
   public NO_OF_CHARS = 256;
 
@@ -22,7 +18,7 @@ export class SearchWrapperComponent implements OnInit {
   ngOnInit() {}
 
   public getSearchedData(event) {
-    console.log(event);
+    this.getData(this.inputData, event);
   }
 
   private getData(data, event) {
@@ -43,9 +39,9 @@ export class SearchWrapperComponent implements OnInit {
     )
   }
 
-  max(a, b) { return (a > b) ? a : b; }
+  private max(a, b) { return (a > b) ? a : b; }
 
-  badCharHeuristic(str, size, badchar) {
+  private badCharHeuristic(str, size, badchar) {
     let i;
     for (i = 0; i < this.NO_OF_CHARS; i++) {
       badchar[i] = -1;
@@ -55,7 +51,7 @@ export class SearchWrapperComponent implements OnInit {
     }
   }
 
-  search(txt, pat) {
+  public  search(txt, pat) {
     const patLen = pat.length;
     const textLen = txt.length;
     const badchar =  [this.NO_OF_CHARS];
